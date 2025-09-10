@@ -1,6 +1,30 @@
 import express from "express";
 import dotenv from 'dotenv'
 import connectDB from "./config/db.js";
+import projectRoutes from "./routes/project.route.js";
+import skillsRoutes from "./routes/skill.route.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Portfolio API",
+      version: "1.0.0",
+      description: "API documentation for Projects & Skills",
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 3000}`,
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
 
 dotenv.config();
 
@@ -9,9 +33,11 @@ const port = process.env.PORT;
 
 connectDB();
 
-app.get("/", (req, res) => {
-    res.send("Hello World, Shit its working")
-})
+app.use(express.json());
+app.use("/api/projects", projectRoutes);
+app.use("/api/skills", skillsRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 app.listen(port, () => {
     console.log("Server started at port: ", port)
