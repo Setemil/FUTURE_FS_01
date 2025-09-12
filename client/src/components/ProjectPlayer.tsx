@@ -1,30 +1,30 @@
-import { ExternalLink, Github, Play, Pause } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ExternalLink, Github, Play, Pause } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ProjectPlayerProps {
   project?: {
-    id: string
-    title: string
-    description: string
-    status: string
-    githubUrl?: string
-    liveUrl?: string
-  } | null
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    githubUrl?: string;
+    liveUrl?: string;
+  } | null;
 }
 
 export function ProjectPlayer({ project }: ProjectPlayerProps) {
   if (!project) {
     return (
-      <footer className="h-20 bg-card border-t border-border flex items-center justify-center px-6">
+      <footer className="fixed inset-x-0 bottom-0 h-20 bg-card border-t border-border flex items-center justify-between px-6 z-50">
         <p className="text-muted-foreground text-sm">
           Select a project to see quick actions
         </p>
       </footer>
-    )
+    );
   }
 
   return (
-    <footer className="h-20 bg-card border-t border-border flex items-center justify-between px-6">
+    <footer className="fixed inset-x-0 bottom-0 h-20 bg-card border-t border-border flex items-center justify-between px-6 z-50">
       {/* Project Info */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-3">
@@ -54,26 +54,26 @@ export function ProjectPlayer({ project }: ProjectPlayerProps) {
             {project.status}
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           {project.githubUrl && (
             <Button
               variant="ghost"
               size="sm"
               className="h-8 px-3 text-muted-foreground hover:text-foreground hover:bg-card-hover"
-              onClick={() => window.open(project.githubUrl, '_blank')}
+              onClick={() => window.open(project.githubUrl, "_blank")}
             >
               <Github className="h-4 w-4 mr-1" />
               Code
             </Button>
           )}
-          
+
           {project.liveUrl && (
             <Button
               variant="ghost"
-              size="sm" 
+              size="sm"
               className="h-8 px-3 text-muted-foreground hover:text-foreground hover:bg-card-hover"
-              onClick={() => window.open(project.liveUrl, '_blank')}
+              onClick={() => window.open(project.liveUrl, "_blank")}
             >
               <ExternalLink className="h-4 w-4 mr-1" />
               Live Demo
@@ -82,5 +82,5 @@ export function ProjectPlayer({ project }: ProjectPlayerProps) {
         </div>
       </div>
     </footer>
-  )
+  );
 }

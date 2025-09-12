@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useState } from "react";
+import {MantineProvider} from '@mantine/core';
 
 import { PortfolioSidebar } from "@/components/PortfolioSidebar";
 import { TopNavigation } from "@/components/TopNavigation";
@@ -22,6 +24,7 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
 
   return (
+    <MantineProvider>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
@@ -51,6 +54,7 @@ const App = () => {
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
+    </MantineProvider>
   );
 };
 

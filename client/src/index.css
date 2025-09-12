@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -62,8 +63,16 @@ All colors MUST be HSL.
     --sidebar-ring: var(--spotify-green);
 
     /* Custom gradients and effects */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--spotify-green)), hsl(var(--spotify-green-dark)));
-    --gradient-card: linear-gradient(145deg, hsl(var(--spotify-dark-gray)), hsl(var(--spotify-gray)));
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(var(--spotify-green)),
+      hsl(var(--spotify-green-dark))
+    );
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(var(--spotify-dark-gray)),
+      hsl(var(--spotify-gray))
+    );
     --shadow-spotify: 0 8px 32px hsl(var(--spotify-black) / 0.3);
     --shadow-green-glow: 0 0 20px hsl(var(--spotify-green) / 0.3);
 
@@ -76,6 +85,7 @@ All colors MUST be HSL.
 @layer base {
   * {
     @apply border-border;
+    font-family: "Outfit", sans-serif;
   }
 
   body {

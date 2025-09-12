@@ -1,75 +1,45 @@
-import { useState } from "react"
-import { ProjectCard } from "@/components/ProjectCard"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Filter, Grid, List } from "lucide-react"
+import { useState, useEffect } from "react";
+import { ProjectCard } from "@/components/ProjectCard";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Filter, Grid, List } from "lucide-react";
 
-// Import project images
-import ecommerceProject from "@/assets/project-ecommerce.jpg"
-import fitnessProject from "@/assets/project-fitness.jpg"
-import aiChatProject from "@/assets/project-ai-chat.jpg"
-import taskflowProject from "@/assets/project-taskflow.jpg"
-
-const allProjects = [
-  {
-    id: "1",
-    title: "E-Commerce Dashboard",
-    category: "Full-Stack",
-    description: "Comprehensive e-commerce platform with admin dashboard, real-time analytics, and payment processing.",
-    image: ecommerceProject,
-    tech: ["React", "Node.js", "MongoDB", "Stripe", "Redux"],
-    githubUrl: "https://github.com/johndoe/ecommerce-dashboard",
-    liveUrl: "https://ecommerce-demo.vercel.app",
-    status: "Completed"
-  },
-  {
-    id: "2", 
-    title: "FitTracker Mobile",
-    category: "Mobile App",
-    description: "Cross-platform fitness tracking app with workout planning, progress tracking, and social features.",
-    image: fitnessProject,
-    tech: ["React Native", "Firebase", "Redux", "AsyncStorage"],
-    githubUrl: "https://github.com/johndoe/fittracker-mobile",
-    liveUrl: "https://play.google.com/store/apps/fittracker",
-    status: "Completed"
-  },
-  {
-    id: "3",
-    title: "AI Chat Assistant",
-    category: "AI/ML",
-    description: "Intelligent chat assistant powered by OpenAI GPT-4 with custom training and conversation memory.",
-    image: aiChatProject,
-    tech: ["Python", "OpenAI", "Flask", "PostgreSQL", "Docker"],
-    githubUrl: "https://github.com/johndoe/ai-chat-assistant",
-    liveUrl: "https://ai-chat-demo.herokuapp.com",
-    status: "In Progress"
-  },
-  {
-    id: "4",
-    title: "TaskFlow Pro",
-    category: "SaaS",
-    description: "Project management tool with team collaboration, time tracking, and advanced reporting.",
-    image: taskflowProject,
-    tech: ["Next.js", "Prisma", "PostgreSQL", "Tailwind", "NextAuth"],
-    githubUrl: "https://github.com/johndoe/taskflow-pro",
-    liveUrl: "https://taskflow-pro.com",
-    status: "Completed"
-  },
-]
-
-const categories = ["All", "Full-Stack", "Mobile App", "AI/ML", "SaaS"]
+const categories = ["All", "Frontend", "Backend", "Fullstack"];
 
 interface ProjectsProps {
-  onProjectSelect: (project: any) => void
+  onProjectSelect: (project: any) => void;
 }
 
 export default function Projects({ onProjectSelect }: ProjectsProps) {
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [projects, setProjects] = useState<any[]>([]);
 
-  const filteredProjects = selectedCategory === "All" 
-    ? allProjects 
-    : allProjects.filter(project => project.category === selectedCategory)
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const response = await fetch("http://localhost:3000/api/projects");
+        if (!response.ok) {
+          throw new Error("Failed to fetch projects");
+        }
+        const data = await response.json();
+        setProjects(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchProjects();
+  }, []);
+
+  const filteredProjects =
+    selectedCategory === "All"
+      ? projects
+      : projects.filter((project) => {
+          const categoryCapitalized =
+            project.category.charAt(0).toUpperCase() +
+            project.category.slice(1);
+          return categoryCapitalized === selectedCategory;
+        });
 
   return (
     <div className="p-6 space-y-6">
@@ -78,10 +48,11 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Projects</h1>
           <p className="text-muted-foreground mt-1">
-            {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
+            {filteredProjects.length}{" "}
+            {filteredProjects.length === 1 ? "project" : "projects"}
           </p>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <Button
             variant={viewMode === "grid" ? "default" : "ghost"}
@@ -125,7 +96,7 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
       </div>
 
       {/* Projects Grid */}
-      <div 
+      <div
         className={
           viewMode === "grid"
             ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -135,7 +106,19 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
         {filteredProjects.map((project) => (
           <ProjectCard
             key={project.id}
-            project={project}
+            project={{
+              ...project,
+              category:
+                project.category.charAt(0).toUpperCase() +
+                project.category.slice(1),
+              tech: project.technologies.map((skill: any) => skill.name),
+              liveUrl: project.links.demo,
+              githubUrl: project.links.github,
+              status:
+                project.status.charAt(0).toUpperCase() +
+                project.status.slice(1),
+              image: project.image,
+            }}
             onPlay={onProjectSelect}
           />
         ))}
@@ -157,5 +140,5 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

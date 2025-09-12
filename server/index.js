@@ -1,10 +1,11 @@
 import express from "express";
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import projectRoutes from "./routes/project.route.js";
 import skillsRoutes from "./routes/skill.route.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 
 const swaggerOptions = {
   definition: {
@@ -25,7 +26,6 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
-
 dotenv.config();
 
 const app = express();
@@ -33,12 +33,19 @@ const port = process.env.PORT;
 
 connectDB();
 
+app.use(
+  cors({
+    origin: "http://localhost:8080", // your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillsRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-
 app.listen(port, () => {
-    console.log("Server started at port: ", port)
-})
+  console.log("Server started at port: ", port);
+});

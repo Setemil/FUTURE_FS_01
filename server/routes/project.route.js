@@ -6,6 +6,7 @@ import {
   updateProject,
   deleteProject,
 } from "../controllers/project.controller.js";
+import Project from "../model/project.model.js";
 
 const router = express.Router();
 
@@ -85,7 +86,16 @@ const router = express.Router();
  */
 
 router.route("/")
-  .get(getProjects)
+  .get(async (req, res) => {
+    try {
+      const projects = await Project.find()
+        .populate("technologies") // <-- this pulls in Skill documents
+        .exec();
+      res.json(projects);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  })
   .post(createProject);
 
 
@@ -136,5 +146,7 @@ router.route("/:id")
   .get(getProject)
   .put(updateProject)
   .delete(deleteProject);
+
+
 
 export default router;

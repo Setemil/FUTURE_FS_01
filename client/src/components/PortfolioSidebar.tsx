@@ -1,5 +1,13 @@
-import { Home, User, FolderOpen, Mail, Play, ExternalLink, Github } from "lucide-react"
-import { NavLink, useLocation } from "react-router-dom"
+import {
+  Home,
+  User,
+  FolderOpen,
+  Mail,
+  Play,
+  ExternalLink,
+  Github,
+} from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -10,20 +18,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // Import project images
-import ecommerceProject from "@/assets/project-ecommerce.jpg"
-import fitnessProject from "@/assets/project-fitness.jpg"
-import aiChatProject from "@/assets/project-ai-chat.jpg"
-import taskflowProject from "@/assets/project-taskflow.jpg"
+import ecommerceProject from "@/assets/project-ecommerce.jpg";
+import fitnessProject from "@/assets/project-fitness.jpg";
+import aiChatProject from "@/assets/project-ai-chat.jpg";
+import taskflowProject from "@/assets/project-taskflow.jpg";
 
 const navigationItems = [
   { title: "Home", url: "/", icon: Home },
   { title: "Projects", url: "/projects", icon: FolderOpen },
   { title: "Profile", url: "/profile", icon: User },
   { title: "Contact", url: "/contact", icon: Mail },
-]
+];
 
 const featuredProjects = [
   {
@@ -31,46 +39,47 @@ const featuredProjects = [
     title: "E-Commerce Dashboard",
     category: "Full-Stack",
     image: ecommerceProject,
-    tech: ["React", "Node.js", "MongoDB"]
+    tech: ["React", "Node.js", "MongoDB"],
   },
   {
-    id: "2", 
+    id: "2",
     title: "FitTracker Mobile",
     category: "Mobile App",
     image: fitnessProject,
-    tech: ["React Native", "Firebase"]
+    tech: ["React Native", "Firebase"],
   },
   {
     id: "3",
     title: "AI Chat Assistant",
     category: "AI/ML",
     image: aiChatProject,
-    tech: ["Python", "OpenAI", "Flask"]
+    tech: ["Python", "OpenAI", "Flask"],
   },
   {
     id: "4",
     title: "TaskFlow Pro",
     category: "SaaS",
     image: taskflowProject,
-    tech: ["Next.js", "Prisma", "PostgreSQL"]
+    tech: ["Next.js", "Prisma", "PostgreSQL"],
   },
-]
+];
 
 export function PortfolioSidebar() {
-  const { state } = useSidebar()
-  const location = useLocation()
-  const currentPath = location.pathname
-  const isCollapsed = state === "collapsed"
+  const { state } = useSidebar();
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isCollapsed = state === "collapsed";
 
-  const isActive = (path: string) => currentPath === path
+  const isActive = (path: string) => currentPath === path;
   const getNavClasses = ({ isActive }: { isActive: boolean }) =>
-    `${isActive 
-      ? "bg-primary text-primary-foreground font-medium" 
-      : "text-muted-foreground hover:bg-card-hover hover:text-foreground"
-    } transition-smooth`
+    `${
+      isActive
+        ? "bg-primary text-primary-foreground font-medium"
+        : "text-muted-foreground hover:bg-card-hover hover:text-foreground"
+    } transition-smooth`;
 
   return (
-    <Sidebar className={isCollapsed ? "w-16" : "w-72"} collapsible="icon">
+    <Sidebar className={isCollapsed ? "w-16" : "w-64"} collapsible="icon">
       <SidebarContent className="bg-sidebar border-r border-border">
         {/* Navigation Section */}
         <SidebarGroup>
@@ -83,8 +92,12 @@ export function PortfolioSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavClasses}>
-                      <item.icon className="h-5 w-5" />
-                      {!isCollapsed && <span className="text-sm font-medium">{item.title}</span>}
+                      <item.icon className="text-spotify-white h-5 w-5" />
+                      {!isCollapsed && (
+                        <span className="text-spotify-white text-sm font-medium">
+                          {item.title}
+                        </span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -132,5 +145,5 @@ export function PortfolioSidebar() {
         )}
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

@@ -1,35 +1,37 @@
-import { useState } from "react"
-import { Search, User, Download, Bell, ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import {
+  Search,
+  User,
+  Download,
+  Bell,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function TopNavigation() {
-  const [searchQuery, setSearchQuery] = useState("")
-
-  const handleDownloadResume = () => {
-    // In a real app, this would download the actual resume
-    console.log("Downloading resume...")
-  }
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <header className="flex items-center justify-between h-16 px-4 bg-background border-b border-border">
       {/* Left section - Navigation and search */}
       <div className="flex items-center space-x-4">
         <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
-        
+
         {/* Navigation arrows */}
         <div className="flex items-center space-x-1">
           <Button
-            variant="ghost" 
+            variant="ghost"
             size="sm"
             className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-card-hover rounded-full"
             disabled
@@ -38,7 +40,7 @@ export function TopNavigation() {
           </Button>
           <Button
             variant="ghost"
-            size="sm" 
+            size="sm"
             className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-card-hover rounded-full"
             disabled
           >
@@ -61,12 +63,16 @@ export function TopNavigation() {
       {/* Right section - Profile and actions */}
       <div className="flex items-center space-x-4">
         {/* Download Resume Button */}
-        <Button
-          onClick={handleDownloadResume}
-          className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold rounded-full px-6"
-        >
-          <Download className="h-4 w-4 mr-2" />
-          Download Resume
+        <Button className="bg-primary hover:bg-primary-hover text-primary-foreground font-semibold rounded-full px-6">
+          <a
+            href="/CV.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            View My Resume
+          </a>
         </Button>
 
         {/* Notifications */}
@@ -88,7 +94,7 @@ export function TopNavigation() {
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" alt="Profile" />
                 <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
-                  JD
+                  SL
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -107,16 +113,20 @@ export function TopNavigation() {
               <span>Skills</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-border" />
-            <DropdownMenuItem 
-              className="hover:bg-card-hover cursor-pointer"
-              onClick={handleDownloadResume}
-            >
-              <Download className="mr-2 h-4 w-4" />
-              <span>Download Resume</span>
+            <DropdownMenuItem className="hover:bg-card-hover cursor-pointer">
+              <a
+                href="/CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center w-full"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                <span>Resume</span>
+              </a>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

@@ -1,88 +1,106 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Mail, Phone, MapPin, Linkedin, Github, Twitter, Download, Send, ExternalLink } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Linkedin,
+  Github,
+  Twitter,
+  Download,
+  Send,
+  ExternalLink,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
-    message: ""
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     // Simulate form submission
     setTimeout(() => {
       toast({
         title: "Message sent!",
         description: "Thank you for your message. I'll get back to you soon.",
-      })
-      setFormData({ name: "", email: "", subject: "", message: "" })
-      setIsSubmitting(false)
-    }, 1000)
-  }
+      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setIsSubmitting(false);
+    }, 1000);
+  };
 
   const contactInfo = [
     {
       icon: Mail,
       label: "Email",
-      value: "john.doe@example.com",
-      href: "mailto:john.doe@example.com"
+      value: "setemiloye@gmail.com",
+      href: "mailto:setemiloye@gmail.com",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567"
+      value: "+234 707 586 5775",
+      href: "tel:+2347075865775",
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "San Francisco, CA",
-      href: null
-    }
-  ]
+      value: "Lagos, Nigeria",
+      href: null,
+    },
+  ];
 
   const socialLinks = [
     {
       icon: Linkedin,
       label: "LinkedIn",
-      href: "https://linkedin.com/in/johndoe",
-      username: "@johndoe"
+      href: "https://linkedin.com/in/setemi-loye",
+      username: "@setemi-loye",
     },
     {
       icon: Github,
       label: "GitHub",
-      href: "https://github.com/johndoe",
-      username: "@johndoe"
+      href: "https://github.com/SetemiL",
+      username: "@Setemil",
     },
     {
       icon: Twitter,
       label: "Twitter",
-      href: "https://twitter.com/johndoe",
-      username: "@johndoe"
-    }
-  ]
+      href: "https://x.com/LoyeSetemi",
+      username: "@LoyeSetemi",
+    },
+  ];
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="pb-24 p-8 space-y-8">
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">Contact Me</h1>
@@ -97,14 +115,17 @@ export default function Contact() {
           <CardHeader>
             <CardTitle className="text-foreground">Send a Message</CardTitle>
             <CardDescription className="text-muted-foreground">
-              Fill out the form below and I'll get back to you as soon as possible.
+              Fill out the form below and I'll get back to you as soon as
+              possible.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-foreground">Name</Label>
+                  <Label htmlFor="name" className="text-foreground">
+                    Name
+                  </Label>
                   <Input
                     id="name"
                     name="name"
@@ -116,7 +137,9 @@ export default function Contact() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-foreground">Email</Label>
+                  <Label htmlFor="email" className="text-foreground">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     name="email"
@@ -129,9 +152,11 @@ export default function Contact() {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="subject" className="text-foreground">Subject</Label>
+                <Label htmlFor="subject" className="text-foreground">
+                  Subject
+                </Label>
                 <Input
                   id="subject"
                   name="subject"
@@ -142,9 +167,11 @@ export default function Contact() {
                   className="bg-background border-border focus:ring-primary focus:border-primary"
                 />
               </div>
-              
+
               <div className="space-y-2">
-                <Label htmlFor="message" className="text-foreground">Message</Label>
+                <Label htmlFor="message" className="text-foreground">
+                  Message
+                </Label>
                 <Textarea
                   id="message"
                   name="message"
@@ -156,7 +183,7 @@ export default function Contact() {
                   className="bg-background border-border focus:ring-primary focus:border-primary resize-none"
                 />
               </div>
-              
+
               <Button
                 type="submit"
                 disabled={isSubmitting}
@@ -174,7 +201,9 @@ export default function Contact() {
           {/* Contact Information */}
           <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-foreground">Contact Information</CardTitle>
+              <CardTitle className="text-foreground">
+                Contact Information
+              </CardTitle>
               <CardDescription className="text-muted-foreground">
                 Feel free to reach out through any of these channels.
               </CardDescription>
@@ -185,7 +214,9 @@ export default function Contact() {
                   <div key={item.label} className="flex items-center space-x-3">
                     <item.icon className="h-5 w-5 text-primary" />
                     <div>
-                      <p className="text-sm font-medium text-foreground">{item.label}</p>
+                      <p className="text-sm font-medium text-foreground">
+                        {item.label}
+                      </p>
                       {item.href ? (
                         <a
                           href={item.href}
@@ -194,7 +225,9 @@ export default function Contact() {
                           {item.value}
                         </a>
                       ) : (
-                        <p className="text-sm text-muted-foreground">{item.value}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {item.value}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -214,18 +247,25 @@ export default function Contact() {
             <CardContent>
               <div className="space-y-4">
                 {socialLinks.map((link) => (
-                  <div key={link.label} className="flex items-center justify-between">
+                  <div
+                    key={link.label}
+                    className="flex items-center justify-between"
+                  >
                     <div className="flex items-center space-x-3">
                       <link.icon className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="text-sm font-medium text-foreground">{link.label}</p>
-                        <p className="text-sm text-muted-foreground">{link.username}</p>
+                        <p className="text-sm font-medium text-foreground">
+                          {link.label}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {link.username}
+                        </p>
                       </div>
                     </div>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => window.open(link.href, '_blank')}
+                      onClick={() => window.open(link.href, "_blank")}
                       className="text-muted-foreground hover:text-foreground hover:bg-card-hover"
                     >
                       <ExternalLink className="h-4 w-4" />
@@ -235,26 +275,8 @@ export default function Contact() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Download Resume */}
-          <Card className="bg-card border-border">
-            <CardContent className="pt-6">
-              <Button
-                className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-semibold"
-                onClick={() => {
-                  toast({
-                    title: "Resume downloaded!",
-                    description: "The resume has been downloaded to your device.",
-                  })
-                }}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download My Resume
-              </Button>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
-  )
+  );
 }
