@@ -17,6 +17,9 @@ import Projects from "./pages/Projects";
 import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import RequestOTP from "./pages/RequestOTP";
+import VerifyOTP from "./pages/VerifyOTP";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -25,35 +28,51 @@ const App = () => {
 
   return (
     <MantineProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <SidebarProvider>
-            <div className="flex min-h-screen w-full bg-background">
-              <PortfolioSidebar />
-              
-              <div className="flex-1 flex flex-col">
-                <TopNavigation />
-                
-                <main className="flex-1 overflow-auto">
-                  <Routes>
-                    <Route path="/" element={<Home onProjectSelect={setSelectedProject} />} />
-                    <Route path="/projects" element={<Projects onProjectSelect={setSelectedProject} />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-                
-                <ProjectPlayer project={selectedProject} />
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <SidebarProvider>
+              <div className="flex min-h-screen w-full bg-background">
+                <PortfolioSidebar />
+
+                <div className="flex-1 flex flex-col">
+                  <TopNavigation />
+
+                  <main className="flex-1 overflow-auto">
+                    <Routes>
+                      {/* Public Portfolio Routes */}
+                      <Route
+                        path="/"
+                        element={<Home onProjectSelect={setSelectedProject} />}
+                      />
+                      <Route
+                        path="/projects"
+                        element={
+                          <Projects onProjectSelect={setSelectedProject} />
+                        }
+                      />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/contact" element={<Contact />} />
+
+                      {/* Protected Admin Routes */}
+                      <Route path="/admin" element={<RequestOTP />} />
+                      <Route path="/admin/verify" element={<VerifyOTP />} />
+                      <Route path="/admin/dashboard" element={<Admin />} />
+
+                      {/* Not Found Page */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+
+                  <ProjectPlayer project={selectedProject} />
+                </div>
               </div>
-            </div>
-          </SidebarProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+            </SidebarProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
     </MantineProvider>
   );
 };

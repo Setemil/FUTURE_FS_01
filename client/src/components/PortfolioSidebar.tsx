@@ -25,6 +25,7 @@ import ecommerceProject from "@/assets/project-ecommerce.jpg";
 import fitnessProject from "@/assets/project-fitness.jpg";
 import aiChatProject from "@/assets/project-ai-chat.jpg";
 import taskflowProject from "@/assets/project-taskflow.jpg";
+import { it } from "node:test";
 
 const navigationItems = [
   { title: "Home", url: "/", icon: Home },
@@ -92,9 +93,15 @@ export function PortfolioSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavClasses}>
-                      <item.icon className="text-spotify-white h-5 w-5" />
+                      <item.icon
+                        className={`${
+                          location.pathname == item.url
+                            ? "text-spotify-green"
+                            : "text-spotify-white"
+                        } h-5 w-5`}
+                      />
                       {!isCollapsed && (
-                        <span className="text-spotify-white text-sm font-medium">
+                        <span className={`${location.pathname == item.url ? 'text-spotify-green':'text-spotify-white'} text-sm font-medium`}>
                           {item.title}
                         </span>
                       )}
