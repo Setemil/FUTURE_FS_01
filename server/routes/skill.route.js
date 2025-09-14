@@ -5,6 +5,7 @@ import {
   updateSkill,
   deleteSkill,
 } from "../controllers/skill.controller.js";
+import { requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -64,7 +65,7 @@ const router = express.Router();
  *         description: Skill created successfully
  */
 
-router.route("/").get(getSkills).post(createSkill);
+router.route("/").get(getSkills).post(requireAdmin, createSkill);
 
 /**
  * @swagger
@@ -96,6 +97,9 @@ router.route("/").get(getSkills).post(createSkill);
  *       204:
  *         description: Skill deleted
  */
-router.route("/:id").put(updateSkill).delete(deleteSkill);
+router
+  .route("/:id")
+  .put(requireAdmin, updateSkill)
+  .delete(requireAdmin, deleteSkill);
 
 export default router;

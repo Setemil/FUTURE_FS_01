@@ -1,11 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import projectRoutes from "./routes/project.route.js";
-import skillsRoutes from "./routes/skill.route.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import cors from "cors";
+
+//Routes imports
+import adminRoutes from "./routes/adminAuth.js";
+import projectRoutes from "./routes/project.route.js";
+import skillsRoutes from "./routes/skill.route.js";
 
 const swaggerOptions = {
   definition: {
@@ -44,6 +47,7 @@ app.use(
 app.use(express.json());
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillsRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.listen(port, () => {

@@ -7,6 +7,7 @@ import {
   deleteProject,
 } from "../controllers/project.controller.js";
 import Project from "../model/project.model.js";
+import { requireAdmin } from '../middleware/auth.js'
 
 const router = express.Router();
 
@@ -96,7 +97,7 @@ router.route("/")
       res.status(500).json({ error: err.message });
     }
   })
-  .post(createProject);
+  .post(requireAdmin, createProject);
 
 
   /**
@@ -144,8 +145,8 @@ router.route("/")
  */
 router.route("/:id")
   .get(getProject)
-  .put(updateProject)
-  .delete(deleteProject);
+  .put(requireAdmin, updateProject)
+  .delete(requireAdmin, deleteProject);
 
 
 
