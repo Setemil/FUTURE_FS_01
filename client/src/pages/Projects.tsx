@@ -131,7 +131,7 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
             No projects found in this category
           </p>
           <Button
-            variant="ghost"
+            variant="secondary"
             onClick={() => setSelectedCategory("All")}
             className="mt-4"
           >

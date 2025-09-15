@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,45 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  MapPin,
-  Calendar,
-  Mail,
-  Phone,
-  ExternalLink,
-  Download,
-} from "lucide-react";
+import { MapPin, Calendar, Mail, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-const skills = {
-  Frontend: [
-    { name: "React", level: 95 },
-    { name: "TypeScript", level: 90 },
-    { name: "Next.js", level: 85 },
-    { name: "Tailwind CSS", level: 88 },
-    { name: "Vue.js", level: 75 },
-  ],
-  Backend: [
-    { name: "Node.js", level: 85 },
-    { name: "Python", level: 80 },
-    { name: "Express.js", level: 85 },
-    { name: "FastAPI", level: 75 },
-    { name: "GraphQL", level: 70 },
-  ],
-  Database: [
-    { name: "MongoDB", level: 85 },
-    { name: "PostgreSQL", level: 80 },
-    { name: "Redis", level: 70 },
-    { name: "Prisma", level: 75 },
-  ],
-  Tools: [
-    { name: "Docker", level: 75 },
-    { name: "AWS", level: 70 },
-    { name: "Git", level: 90 },
-    { name: "Figma", level: 65 },
-  ],
-};
 
 const experience = [
   {
@@ -142,7 +107,7 @@ export default function Profile() {
               </Button>
             </a>
             <Link to="/contact">
-              <Button variant="outline" className="border-border">
+              <Button variant="secondary" className="border-border">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact Me
               </Button>
@@ -156,13 +121,15 @@ export default function Profile() {
         <h2 className="text-2xl font-bold text-foreground">
           Skills & Technologies
         </h2>
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Object.entries(skills).map(([category, skillList]) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {Object.entries(groupedSkills).map(([category, skillList]) => (
             <Card key={category} className="bg-card border-border">
               <CardHeader>
-                <CardTitle className="text-foreground">{category}</CardTitle>
+                <CardTitle className="capitalize text-foreground">
+                  {category}
+                </CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  {category == "Tools"
+                  {category == "tools"
                     ? `Tools I use for Development`
                     : `Technologies I work with in ${category.toLowerCase()} development`}
                 </CardDescription>
@@ -172,54 +139,19 @@ export default function Profile() {
                   {skillList.map((skill) => (
                     <div key={skill.name} className="space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-foreground">
-                          {skill.name}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {skill.level}%
-                        </span>
-                      </div>
-                      <div className="w-full bg-secondary rounded-full h-2">
-                        <div
-                          className="bg-primary rounded-full h-2 transition-all duration-500"
-                          style={{ width: `${skill.level}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div> */}
-        {/* Edit this later if any problem arises */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Object.entries(groupedSkills).map(([category, skillList]) => (
-            <Card key={category} className="bg-card border-border">
-              <CardHeader>
-                <CardTitle className="capitalize text-foreground">
-                  {category}
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  {`Technologies I work with in ${category} development`}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {skillList.map((skill) => (
-                    <div key={skill.name} className="space-y-2">
-                      <div className="flex justify-between items-center">
                         <span className="text-sm font-medium text-foreground flex items-center gap-2">
-                          <img
-                            src={skill.icon}
-                            alt={skill.name}
-                            className="h-4 w-4"
-                          />
+                          
+                            <img
+                              src={skill.icon}
+                              alt={skill.name}
+                              className="h-4 w-4"
+                            />
                           {skill.name}
                         </span>
                         <span className="text-xs text-muted-foreground">
-                          {skill.proficiency.charAt(0).toUpperCase() + skill.proficiency.slice(1)} •{" "}
-                          {skill.yearsOfExperience} yrs
+                          {skill.proficiency.charAt(0).toUpperCase() +
+                            skill.proficiency.slice(1)}{" "}
+                          • {skill.yearsOfExperience} yrs
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">

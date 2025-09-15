@@ -20,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import RequestOTP from "./pages/RequestOTP";
 import VerifyOTP from "./pages/VerifyOTP";
 import Admin from "./pages/Admin";
+import ProjectForm from "./pages/ProjectForm";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,8 @@ const App = () => {
                       <Route path="/admin" element={<RequestOTP />} />
                       <Route path="/admin/verify" element={<VerifyOTP />} />
                       <Route path="/admin/dashboard" element={<Admin />} />
+                      <Route path="/admin/projects/new" element={<ProjectForm mode="add"/>} />
+                      <Route path="/admin/projects/edit/:id" element={<ProjectForm mode="edit"/>} />
 
                       {/* Not Found Page */}
                       <Route path="*" element={<NotFound />} />
