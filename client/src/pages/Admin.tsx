@@ -11,9 +11,11 @@ import {
   User,
   Code,
   Database,
-  Wrench,
+  GitFork,
+  CodeXml,
 } from "lucide-react";
 import SkillForm from "@/components/SkillsForm";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Badge } from "@/components/Card";
 import ProjectForm from "./ProjectForm";
 
 const Admin = () => {
@@ -22,6 +24,7 @@ const Admin = () => {
   const [skills, setSkills] = useState([]);
   const [showSkillModal, setShowSkillModal] = useState(false);
   const [editingSkill, setEditingSkill] = useState(null);
+  const [experience, setExperience] = useState([]);
   const token = localStorage.getItem("adminToken");
 
   useEffect(() => {
@@ -62,16 +65,32 @@ const Admin = () => {
     fetchSkills();
   }, []);
 
+  useEffect(() => {
+    async function fetchExperience() {
+      try {
+        const response = await fetch("http://localhost:3000/api/experience");
+        if (!response.ok) {
+          throw new Error("Failed to get experience");
+        }
+        const data = await response.json();
+        setExperience(data); 
+      } catch (error) {
+        console.log(error.message);
+      }
+    }
+    fetchExperience();
+  }, [])
+
   const getCategoryIcon = (category) => {
     switch (category) {
       case "frontend":
         return <Code className="w-4 h-4" />;
       case "backend":
-        return <Database className="w-4 h-4" />;
+        return <CodeXml className="w-4 h-4" />;
       case "fullstack":
         return <User className="w-4 h-4" />;
       case "tools":
-        return <Wrench className="w-4 h-4" />;
+        return <GitFork className="w-4 h-4" />;
       case "database":
         return <Database className="w-4 h-4" />;
       default:
@@ -105,6 +124,51 @@ const Admin = () => {
     }
   };
 
+  const formatDatePeriod = (startDate, endDate, isCurrent) => {
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+      });
+    };
+
+    const start = formatDate(startDate);
+    const end = isCurrent ? "Present" : formatDate(endDate);
+
+    return `${start} - ${end}`;
+  };
+  
+  // Experience Card Component
+
+  const ExperienceCard = ({ job }) => {
+    return (
+      <Card className="bg-card border-border">
+        <CardHeader>
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="text-foreground">{job.role}</CardTitle>
+              <CardDescription className="text-primary font-medium">
+                {job.location}
+              </CardDescription>
+            </div>
+            <Badge
+              variant="secondary"
+              className="bg-secondary/50 text-secondary-foreground"
+            >
+              {formatDatePeriod(job.startDate, job.endDate, job.isCurrent)}
+            </Badge>
+          </div>
+        </CardHeader>
+        {job.workDescription && (
+          <CardContent>
+            <p className="text-muted-foreground">{job.workDescription}</p>
+          </CardContent>
+        )}
+      </Card>
+    );
+  };
+
+    //  Project Card Component
   const ProjectCard = ({ project }) => (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-4">
@@ -332,7 +396,7 @@ const Admin = () => {
         </div>
 
         {/* Skills Section */}
-        <div className="space-y-4 pb-16">
+        <div className="space-y-4 pb-8">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-semibold text-gray-900">
               Skills ({skills.length})
@@ -359,6 +423,35 @@ const Admin = () => {
             <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
               {skills.map((skill) => (
                 <SkillCard key={skill._id} skill={skill} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Experience Section */}
+        <div className="space-y-4 pb-16">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Experience ({experience.length})
+            </h2>
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Add Experience
+            </button>
+          </div>
+
+          {experience.length === 0 ? (
+            <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
+              <p className="text-gray-500">
+                No Experience found. Add your first xp to get started!
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+              {experience.map((xp) => (
+                <ExperienceCard key={xp._id} job={xp}  />
               ))}
             </div>
           )}

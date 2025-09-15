@@ -9,6 +9,7 @@ import cors from "cors";
 import adminRoutes from "./routes/adminAuth.js";
 import projectRoutes from "./routes/project.route.js";
 import skillsRoutes from "./routes/skill.route.js";
+import experienceRoutes from './routes/experience.route.js';
 
 const swaggerOptions = {
   definition: {
@@ -45,9 +46,14 @@ app.use(
 );
 
 app.use(express.json());
+
+//MAIN API ROUTES
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillsRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/experience", experienceRoutes)
+
+//SWAGGER URL FOR VIEWING ROUTE DOCS
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.listen(port, () => {

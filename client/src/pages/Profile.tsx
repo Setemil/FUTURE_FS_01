@@ -140,12 +140,11 @@ export default function Profile() {
                     <div key={skill.name} className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-medium text-foreground flex items-center gap-2">
-                          
-                            <img
-                              src={skill.icon}
-                              alt={skill.name}
-                              className="h-4 w-4"
-                            />
+                          <img
+                            src={skill.icon}
+                            alt={skill.name}
+                            className="h-5 w-5"
+                          />
                           {skill.name}
                         </span>
                         <span className="text-xs text-muted-foreground">
