@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,7 +16,6 @@ import {
   GitFork,
   CodeXml,
 } from "lucide-react";
-import SkillForm from "@/components/SkillsForm";
 import {
   Card,
   CardContent,
@@ -23,8 +24,12 @@ import {
   CardTitle,
   Badge,
 } from "@/components/Card";
+
+//Form Imports and Components
+import SkillForm from "@/components/SkillsForm";
 import ProjectForm from "@/components/ProjectForm";
 import ExperienceForm from "@/components/ExperienceForm";
+import DeleteModal from "@/components/DeleteModal";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -43,6 +48,12 @@ const Admin = () => {
   const [showExperienceModal, setShowExperienceModal] = useState(false);
   const [editingExperience, setEditingExperience] = useState(null);
   const [experience, setExperience] = useState([]);
+
+  const [deletingItem, setDeletingItem] = useState<{
+    type: string;
+    item: any;
+  } | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const token = localStorage.getItem("adminToken");
 
@@ -150,11 +161,45 @@ const Admin = () => {
         month: "short",
       });
     };
-
     const start = formatDate(startDate);
     const end = isCurrent ? "Present" : formatDate(endDate);
-
     return `${start} - ${end}`;
+  };
+
+  const deleteItem = async () => {
+    console.log(`About to delete a ${deletingItem.type}`);
+    console.log(deletingItem.item);
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/${deletingItem.type}/${deletingItem.item._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to Delete");
+      }
+      if (deletingItem.type === "projects") {
+        setProjects((prev) =>
+          prev.filter((p) => p._id !== deletingItem.item._id)
+        );
+      } else if (deletingItem.type === "skills") {
+        setSkills((prev) =>
+          prev.filter((s) => s._id !== deletingItem.item._id)
+        );
+      } else if (deletingItem.type === "experience") {
+        setExperience((prev) =>
+          prev.filter((e) => e._id !== deletingItem.item._id)
+        );
+      }
+    } catch (error) {
+      console.log("Error Deleting: ", error);
+    }
+    setDeletingItem(null);
+    setShowDeleteModal(false);
   };
 
   // Experience Card Component
@@ -196,7 +241,8 @@ const Admin = () => {
                 <button
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   onClick={() => {
-                    console.log("Delete experience", experience._id);
+                    setDeletingItem({ type: "experience", item: experience });
+                    setShowDeleteModal(true);
                   }}
                 >
                   <Trash2 className="w-4 h-4" />
@@ -248,7 +294,13 @@ const Admin = () => {
           >
             <Edit2 className="w-4 h-4" />
           </button>
-          <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+          <button
+            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={() => {
+              setDeletingItem({ type: "projects", item: project });
+              setShowDeleteModal(true);
+            }}
+          >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
@@ -361,7 +413,13 @@ const Admin = () => {
           >
             <Edit2 className="w-4 h-4" />
           </button>
-          <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+          <button
+            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            onClick={() => {
+              setDeletingItem({ type: "skills", item: skill });
+              setShowDeleteModal(true);
+            }}
+          >
             <Trash2 className="w-4 h-4" />
           </button>
         </div>
@@ -517,19 +575,24 @@ const Admin = () => {
         <ProjectForm
           initialData={editingProject}
           onSave={(data) => {
-            if (editingSkill) {
-              fetch(`http://localhost:3000/api/projects/${editingProject._id}`, {
-                method: "PUT",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-                body: data,
-              }).then((res) => {
+            if (editingProject) {
+              fetch(
+                `http://localhost:3000/api/projects/${editingProject._id}`,
+                {
+                  method: "PUT",
+                  headers: {
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: data,
+                }
+              ).then((res) => {
                 if (res.ok) {
                   res.json().then((updatedProject) => {
                     setProjects((prev) =>
                       prev.map((project) =>
-                        project._id === updatedProject._id ? updatedProject : project
+                        project._id === updatedProject._id
+                          ? updatedProject
+                          : project
                       )
                     );
                     setShowProjectModal(false);
@@ -666,6 +729,14 @@ const Admin = () => {
             }
           }}
           onClose={() => setShowExperienceModal(false)}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          opened={showDeleteModal}
+          close={() => setShowDeleteModal(false)}
+          deletingItem={deletingItem}
+          deleteFunc={deleteItem}
         />
       )}
     </div>

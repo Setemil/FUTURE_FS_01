@@ -6,7 +6,6 @@ import {
   updateProject,
   deleteProject,
 } from "../controllers/project.controller.js";
-import Project from "../model/project.model.js";
 import { requireAdmin } from '../middleware/auth.js'
 import multer from "multer";
 
@@ -94,6 +93,7 @@ router
   .route("/")
   .get(getProjects)
   .post(
+    requireAdmin,
     upload.fields([{ name: "image", maxCount: 1 }, { name: "screenshots" }]),
     createProject
   );
@@ -142,9 +142,14 @@ router
  *       204:
  *         description: Project deleted
  */
-router.route("/:id")
+router
+  .route("/:id")
   .get(getProject)
-  .put(requireAdmin, updateProject)
+  .put(
+    requireAdmin,
+    upload.fields([{ name: "image", maxCount: 1 }, { name: "screenshots" }]),
+    updateProject
+  )
   .delete(requireAdmin, deleteProject);
 
 
