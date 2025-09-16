@@ -1,8 +1,8 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
 import AdminOTP from "../model/adminOTP.model.js";
+import {transporter} from '../config/mailer.js'
 
 const router = express.Router();
 
@@ -24,31 +24,26 @@ router.post("/send-otp", async (req, res) => {
     expiresAt: new Date(Date.now() + 5 * 60 * 1000), // 5 mins
   });
 
-  //THIS INITIALIZES THE NODEMAILER TRANSPORTER WHICH WILL SEND THE OTP TO THE ADMIN EMAIL
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.GOOGLE_SMTP_EMAIL,
-      pass: process.env.GOOGLE_SMTP_PASSWORD,
-    },
-  });
-
-  //THIS ACTUALLY SENDS THE OTP TO THE ADMIN EMAIL
- await transporter.sendMail({
-   from: `"Portfolio Admin" <${process.env.GOOGLE_SMTP_EMAIL}>`,
-   to: email,
-   subject: "Your Admin OTP",
-   text: `Your OTP is ${otp}. If you (Setemi) didn&apos;t request this, someone might be trying to access your account. Do not share this code.`,
-   html: `
+  try {
+    //THIS ACTUALLY SENDS THE OTP TO THE ADMIN EMAIL
+    await transporter.sendMail({
+      from: `"Portfolio Admin" <${process.env.GOOGLE_SMTP_EMAIL}>`,
+      to: email,
+      subject: "Your Admin OTP",
+      text: `Your OTP is ${otp}. If you (Setemi) didn&apos;t request this, someone might be trying to access your account. Do not share this code.`,
+      html: `
     <p>Your OTP is <b>${otp}</b></p>
     <p>If you (Setemi) didn&apos;t request this, someone is trying to hack into your stuff 😅. 
     Sha don't send it to anybody, yktv.</p>
   `,
- });
+    });
+    res.json({ message: "OTP sent" });
 
-  res.json({ message: "OTP sent" });
-});
-
+  } catch (error) {
+    console.error("Error sending mail:", error);
+    return res.status(500).json({ message: "Failed to send OTP" });
+  }
+})
 router.post("/verify-otp", async (req, res) => {
   const { email, otp } = req.body;
 
@@ -70,4 +65,4 @@ router.post("/verify-otp", async (req, res) => {
   res.json({ token });
 });
 
-export default router;
+export default router

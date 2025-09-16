@@ -46,15 +46,39 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
+    try {
+      const res = await fetch("http://localhost:3000/api/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
-      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      if (res.ok) {
+        toast({
+          title: "Message sent ✅",
+          description: "Thanks for reaching out, I'll get back to you soon.",
+        });
+        // reset form
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        toast({
+          title: "Error ❌",
+          description: "Something went wrong, please try again later.",
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      console.error("Error sending contact form:", err);
+      toast({
+        title: "Network Error",
+        description: "Unable to send message. Check your internet connection.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   const contactInfo = [
