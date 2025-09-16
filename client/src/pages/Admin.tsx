@@ -15,16 +15,35 @@ import {
   CodeXml,
 } from "lucide-react";
 import SkillForm from "@/components/SkillsForm";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Badge } from "@/components/Card";
-import ProjectForm from "./ProjectForm";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Badge,
+} from "@/components/Card";
+import ProjectForm from "@/components/ProjectForm";
+import ExperienceForm from "@/components/ExperienceForm";
 
 const Admin = () => {
   const navigate = useNavigate();
+
+  // PROJECTS STATES
   const [projects, setProjects] = useState([]);
+  const [showProjectModal, setShowProjectModal] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+
+  //SKILLS STATES
   const [skills, setSkills] = useState([]);
   const [showSkillModal, setShowSkillModal] = useState(false);
   const [editingSkill, setEditingSkill] = useState(null);
+
+  // EXPERIENCE STATES
+  const [showExperienceModal, setShowExperienceModal] = useState(false);
+  const [editingExperience, setEditingExperience] = useState(null);
   const [experience, setExperience] = useState([]);
+
   const token = localStorage.getItem("adminToken");
 
   useEffect(() => {
@@ -73,13 +92,13 @@ const Admin = () => {
           throw new Error("Failed to get experience");
         }
         const data = await response.json();
-        setExperience(data); 
+        setExperience(data);
       } catch (error) {
         console.log(error.message);
       }
     }
     fetchExperience();
-  }, [])
+  }, []);
 
   const getCategoryIcon = (category) => {
     switch (category) {
@@ -137,38 +156,67 @@ const Admin = () => {
 
     return `${start} - ${end}`;
   };
-  
+
   // Experience Card Component
 
-  const ExperienceCard = ({ job }) => {
+  const ExperienceCard = ({ experience }) => {
     return (
       <Card className="bg-card border-border">
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-foreground">{job.role}</CardTitle>
+              <CardTitle className="text-foreground">
+                {experience.role}
+              </CardTitle>
               <CardDescription className="text-primary font-medium">
-                {job.location}
+                {experience.location}
               </CardDescription>
             </div>
-            <Badge
-              variant="secondary"
-              className="bg-secondary/50 text-secondary-foreground"
-            >
-              {formatDatePeriod(job.startDate, job.endDate, job.isCurrent)}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge
+                variant="secondary"
+                className="bg-secondary/50 text-secondary-foreground"
+              >
+                {formatDatePeriod(
+                  experience.startDate,
+                  experience.endDate,
+                  experience.isCurrent
+                )}
+              </Badge>
+              <div className="flex gap-2 ml-2">
+                <button
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  onClick={() => {
+                    setEditingExperience(experience);
+                    setShowExperienceModal(true);
+                  }}
+                >
+                  <Edit2 className="w-4 h-4" />
+                </button>
+                <button
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  onClick={() => {
+                    console.log("Delete experience", experience._id);
+                  }}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
         </CardHeader>
-        {job.workDescription && (
+        {experience.workDescription && (
           <CardContent>
-            <p className="text-muted-foreground">{job.workDescription}</p>
+            <p className="text-muted-foreground">
+              {experience.workDescription}
+            </p>
           </CardContent>
         )}
       </Card>
     );
   };
 
-    //  Project Card Component
+  //  Project Card Component
   const ProjectCard = ({ project }) => (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-4">
@@ -191,7 +239,13 @@ const Admin = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+          <button
+            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            onClick={() => {
+              setShowProjectModal(true);
+              setEditingProject(project);
+            }}
+          >
             <Edit2 className="w-4 h-4" />
           </button>
           <button className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
@@ -256,17 +310,6 @@ const Admin = () => {
               Code
             </a>
           )}
-          {project.links?.caseStudy && (
-            <a
-              href={project.links.caseStudy}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-green-600 hover:text-green-800 text-sm"
-            >
-              <Eye className="w-3 h-3" />
-              Case Study
-            </a>
-          )}
         </div>
         {project.finishedAt && (
           <div className="flex items-center gap-1 text-gray-500 text-sm">
@@ -277,6 +320,8 @@ const Admin = () => {
       </div>
     </div>
   );
+
+  // Skill Card Component
 
   const SkillCard = ({ skill }) => (
     <div className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow w-full">
@@ -374,7 +419,13 @@ const Admin = () => {
             <h2 className="text-xl font-semibold text-gray-900">
               Projects ({projects.length})
             </h2>
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => {
+                setEditingProject(null);
+                setShowProjectModal(true);
+              }}
+            >
               <Plus className="w-4 h-4" />
               Add Project
             </button>
@@ -436,6 +487,10 @@ const Admin = () => {
             </h2>
             <button
               className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              onClick={() => {
+                setEditingExperience(null);
+                setShowExperienceModal(true);
+              }}
             >
               <Plus className="w-4 h-4" />
               Add Experience
@@ -451,12 +506,62 @@ const Admin = () => {
           ) : (
             <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
               {experience.map((xp) => (
-                <ExperienceCard key={xp._id} job={xp}  />
+                <ExperienceCard key={xp._id} experience={xp} />
               ))}
             </div>
           )}
         </div>
       </div>
+      // Project Modal
+      {showProjectModal && (
+        <ProjectForm
+          initialData={editingProject}
+          onSave={(data) => {
+            if (editingSkill) {
+              fetch(`http://localhost:3000/api/projects/${editingProject._id}`, {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                body: data,
+              }).then((res) => {
+                if (res.ok) {
+                  res.json().then((updatedProject) => {
+                    setProjects((prev) =>
+                      prev.map((project) =>
+                        project._id === updatedProject._id ? updatedProject : project
+                      )
+                    );
+                    setShowProjectModal(false);
+                    setEditingProject(null);
+                  });
+                } else {
+                  console.error("Failed to update Project");
+                }
+              });
+            } else {
+              fetch("http://localhost:3000/api/projects", {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                body: data,
+              }).then((res) => {
+                if (res.ok) {
+                  res.json().then((newProject) => {
+                    setProjects((prev) => [...prev, newProject]);
+                    setShowProjectModal(false);
+                  });
+                } else {
+                  console.error("Failed to add Project");
+                }
+              });
+            }
+          }}
+          onClose={() => setShowProjectModal(false)}
+        />
+      )}
+      // Skill Modal
       {showSkillModal && (
         <SkillForm
           initialData={editingSkill}
@@ -505,6 +610,62 @@ const Admin = () => {
             }
           }}
           onClose={() => setShowSkillModal(false)}
+        />
+      )}
+      // Experience Modal
+      {showExperienceModal && (
+        <ExperienceForm
+          initialData={editingExperience}
+          onSave={(data) => {
+            if (editingExperience) {
+              fetch(
+                `http://localhost:3000/api/experience/${editingExperience._id}`,
+                {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify(data),
+                }
+              ).then((res) => {
+                if (res.ok) {
+                  res.json().then((updatedExperience) => {
+                    setExperience((prev) =>
+                      prev.map((skill) =>
+                        skill._id === updatedExperience._id
+                          ? updatedExperience
+                          : experience
+                      )
+                    );
+                    setShowExperienceModal(false);
+                    setEditingExperience(null);
+                  });
+                } else {
+                  console.error("Failed to update experience");
+                }
+              });
+            } else {
+              fetch("http://localhost:3000/api/experience", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+              }).then((res) => {
+                if (res.ok) {
+                  res.json().then((newExperience) => {
+                    setExperience((prev) => [...prev, newExperience]);
+                    setShowExperienceModal(false);
+                  });
+                } else {
+                  console.error("Failed to add Experience");
+                }
+              });
+            }
+          }}
+          onClose={() => setShowExperienceModal(false)}
         />
       )}
     </div>

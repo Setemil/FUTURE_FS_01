@@ -6,13 +6,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useState } from "react";
-import {MantineProvider} from '@mantine/core';
+import { MantineProvider } from "@mantine/core";
 
 import { PortfolioSidebar } from "@/components/PortfolioSidebar";
 import { TopNavigation } from "@/components/TopNavigation";
 import { ProjectPlayer } from "@/components/ProjectPlayer";
 
-import Home from "./pages/Home";
 import Projects from "./pages/Projects";
 import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
@@ -20,7 +19,6 @@ import NotFound from "./pages/NotFound";
 import RequestOTP from "./pages/RequestOTP";
 import VerifyOTP from "./pages/VerifyOTP";
 import Admin from "./pages/Admin";
-import ProjectForm from "./pages/ProjectForm";
 
 const queryClient = new QueryClient();
 
@@ -44,25 +42,20 @@ const App = () => {
                   <main className="flex-1 overflow-auto">
                     <Routes>
                       {/* Public Portfolio Routes */}
-                      <Route
-                        path="/"
-                        element={<Home onProjectSelect={setSelectedProject} />}
-                      />
+
                       <Route
                         path="/projects"
                         element={
                           <Projects onProjectSelect={setSelectedProject} />
                         }
                       />
-                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/" element={<Profile />} />
                       <Route path="/contact" element={<Contact />} />
 
                       {/* Protected Admin Routes */}
                       <Route path="/admin" element={<RequestOTP />} />
                       <Route path="/admin/verify" element={<VerifyOTP />} />
                       <Route path="/admin/dashboard" element={<Admin />} />
-                      <Route path="/admin/projects/new" element={<ProjectForm mode="add"/>} />
-                      <Route path="/admin/projects/edit/:id" element={<ProjectForm mode="edit"/>} />
 
                       {/* Not Found Page */}
                       <Route path="*" element={<NotFound />} />

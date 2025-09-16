@@ -25,12 +25,10 @@ import ecommerceProject from "@/assets/project-ecommerce.jpg";
 import fitnessProject from "@/assets/project-fitness.jpg";
 import aiChatProject from "@/assets/project-ai-chat.jpg";
 import taskflowProject from "@/assets/project-taskflow.jpg";
-import { it } from "node:test";
 
 const navigationItems = [
-  { title: "Home", url: "/", icon: Home },
+  { title: "Profile", url: "/", icon: User },
   { title: "Projects", url: "/projects", icon: FolderOpen },
-  { title: "Profile", url: "/profile", icon: User },
   { title: "Contact", url: "/contact", icon: Mail },
 ];
 
@@ -101,7 +99,13 @@ export function PortfolioSidebar() {
                         } h-5 w-5`}
                       />
                       {!isCollapsed && (
-                        <span className={`${location.pathname == item.url ? 'text-spotify-green':'text-spotify-white'} text-sm font-medium`}>
+                        <span
+                          className={`${
+                            location.pathname == item.url
+                              ? "text-spotify-green"
+                              : "text-spotify-white"
+                          } text-sm font-medium`}
+                        >
                           {item.title}
                         </span>
                       )}

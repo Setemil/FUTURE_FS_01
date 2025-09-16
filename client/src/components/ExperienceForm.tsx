@@ -5,8 +5,8 @@ const ExperienceForm = ({ initialData, onSave, onClose }) => {
     role: "",
     location: "",
     workDescription: "",
-    startDate: Date.now(),
-    endDate: Date.now(),
+    startDate: "",
+    endDate: "",
     isCurrent: false,
   });
 
@@ -15,88 +15,92 @@ const ExperienceForm = ({ initialData, onSave, onClose }) => {
       setForm(initialData);
     }
   }, [initialData]);
-    
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm({
-          ...form,
-          [name]: name === "yearsOfExperience" ? Number(value) : value,
-        });
-    }
 
-    const handleSubmit = (e) => 
-    {
-        e.preventDefault();
-        onSave(form)
-        onClose()
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(form);
+    onClose();
+  };
+
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        ...initialData,
+        startDate: initialData.startDate
+          ? initialData.startDate.split("T")[0]
+          : "",
+        endDate: initialData.endDate ? initialData.endDate.split("T")[0] : "",
+      });
     }
+  }, [initialData]);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-lg font-semibold mb-4">
-          {initialData ? "Edit Skill" : "Add Skill"}
+          {initialData ? "Edit Experience" : "Add Experience"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
-            name="name"
-            placeholder="Skill Name"
-            value={form.name}
+            name="role"
+            placeholder="What was the role in the place?"
+            value={form.role}
             onChange={handleChange}
             className="w-full border rounded p-2"
             required
-          />
-          <select
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-            required
-          >
-            <option value="">Select Category</option>
-            <option value="frontend">Frontend</option>
-            <option value="backend">Backend</option>
-            <option value="fullstack">Fullstack</option>
-            <option value="tools">Tools</option>
-            <option value="database">Database</option>
-            <option value="other">Other</option>
-          </select>
-          <input
-            type="number"
-            name="yearsOfExperience"
-            placeholder="Years Of Experience"
-            value={form.yearsOfExperience}
-            onChange={handleChange}
-            min="0"
-            className="w-full border rounded p-2"
           />
           <input
             type="text"
-            name="icon"
-            placeholder="Input the icon url"
-            value={form.icon}
+            name="location"
+            placeholder="Where did you work?"
+            value={form.location}
             onChange={handleChange}
             className="w-full border rounded p-2"
           />
-          <select
-            name="proficiency"
-            value={form.proficiency}
-            onChange={handleChange}
-            className="w-full border rounded p-2"
-          >
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
-          </select>
           <textarea
-            name="description"
-            placeholder="Description"
-            value={form.description}
+            name="workDescription"
+            placeholder="Describe your work"
+            value={form.workDescription}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            rows={4}
+          />
+          <input
+            type="date"
+            name="startDate"
+            placeholder="When did you start?"
+            value={form.startDate}
             onChange={handleChange}
             className="w-full border rounded p-2"
           />
+          <input
+            type="date"
+            name="endDate"
+            placeholder="When did you end?"
+            value={form.endDate}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            disabled={form.isCurrent}
+          />
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="isCurrent"
+              checked={form.isCurrent}
+              onChange={(e) =>
+                setForm({ ...form, isCurrent: e.target.checked })
+              }
+              className="mr-2"
+            />
+            I currently work here
+          </label>
 
           <div className="flex justify-end gap-2">
             <button

@@ -15,7 +15,6 @@ const projectSchema = mongoose.Schema({
   links: {
     demo: String,
     github: String,
-    caseStudy: String,
   },
   status: {
     type: String,

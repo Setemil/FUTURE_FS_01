@@ -8,8 +8,12 @@ import {
 } from "../controllers/project.controller.js";
 import Project from "../model/project.model.js";
 import { requireAdmin } from '../middleware/auth.js'
+import multer from "multer";
+
 
 const router = express.Router();
+const upload = multer({ dest: "uploads/" });
+
 
 /**
  * @swagger
@@ -86,21 +90,16 @@ const router = express.Router();
  *         description: Project created successfully
  */
 
-router.route("/")
-  .get(async (req, res) => {
-    try {
-      const projects = await Project.find()
-        .populate("technologies") // <-- this pulls in Skill documents
-        .exec();
-      res.json(projects);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  })
-  .post(requireAdmin, createProject);
+router
+  .route("/")
+  .get(getProjects)
+  .post(
+    upload.fields([{ name: "image", maxCount: 1 }, { name: "screenshots" }]),
+    createProject
+  );
 
 
-  /**
+/**
  * @swagger
  * /api/projects/{id}:
  *   get:

@@ -13,38 +13,35 @@ import { MapPin, Calendar, Mail, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const experience = [
-  {
-    title: "Senior Full-Stack Developer",
-    company: "TechCorp Inc.",
-    period: "2022 - Present",
-    description:
-      "Leading development of scalable web applications using React, Node.js, and cloud technologies.",
-  },
-  {
-    title: "Full-Stack Developer",
-    company: "StartupXYZ",
-    period: "2020 - 2022",
-    description:
-      "Built and maintained multiple web applications, improved performance by 40%, and mentored junior developers.",
-  },
-  {
-    title: "Frontend Developer",
-    company: "WebAgency",
-    period: "2018 - 2020",
-    description:
-      "Developed responsive web applications and collaborated with design teams to create exceptional user experiences.",
-  },
-];
-
 export default function Profile() {
+  const formatDatePeriod = (startDate, endDate, isCurrent) => {
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+      });
+    };
+
+    const start = formatDate(startDate);
+    const end = isCurrent ? "Present" : formatDate(endDate);
+
+    return `${start} - ${end}`;
+  };
   const [data, setData] = useState([]);
+  const [experience, setExperience] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/skills")
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching skills:", error));
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/experience")
+      .then((response) => response.json())
+      .then((data) => setExperience(data))
+      .catch((error) => console.error("Error fetching Experience: ", error));
   }, []);
 
   const groupedSkills = data.reduce((acc, skill) => {
@@ -55,6 +52,7 @@ export default function Profile() {
     return acc;
   }, {} as Record<string, any[]>);
 
+  console.log(experience);
   return (
     <div className="p-6 space-y-8">
       {/* Profile Header */}
@@ -170,31 +168,37 @@ export default function Profile() {
         <h2 className="text-2xl font-bold text-foreground">Experience</h2>
 
         <div className="space-y-6">
-          {experience.map((job, index) => (
-            <Card key={index} className="bg-card border-border">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-foreground">
-                      {job.title}
-                    </CardTitle>
-                    <CardDescription className="text-primary font-medium">
-                      {job.company}
-                    </CardDescription>
+          {[...experience]
+            .sort(
+              (a, b) =>
+                new Date(b.startDate).getTime() -
+                new Date(a.startDate).getTime()
+            )
+            .map((xp, index) => (
+              <Card key={index} className="bg-card border-border">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-foreground">
+                        {xp.role}
+                      </CardTitle>
+                      <CardDescription className="text-primary font-medium">
+                        {xp.location}
+                      </CardDescription>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className="bg-secondary/50 text-secondary-foreground"
+                    >
+                      {formatDatePeriod(xp.startDate, xp.endDate, xp.isCurrent)}
+                    </Badge>
                   </div>
-                  <Badge
-                    variant="secondary"
-                    className="bg-secondary/50 text-secondary-foreground"
-                  >
-                    {job.period}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">{job.description}</p>
-              </CardContent>
-            </Card>
-          ))}
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">{xp.workDescription}</p>
+                </CardContent>
+              </Card>
+            ))}
         </div>
       </section>
     </div>

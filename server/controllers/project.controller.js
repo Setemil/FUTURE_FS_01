@@ -1,13 +1,13 @@
 import Project from '../model/project.model.js';
 
-export const getProjects = async (req,res) => {
+export const getProjects = async (req, res) => {
     try {
-        const projects = await Project.find();
-        res.json(projects);
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching projects" });
+      const projects = await Project.find().populate("technologies").exec();
+      res.json(projects);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
-}
+  }
 
 export const getProject = async (req,res) => {
     try {
@@ -18,16 +18,6 @@ export const getProject = async (req,res) => {
         res.json(project);
     } catch (error) {
         res.status(500).json({ message: "Error fetching project" });
-    }
-}
-
-export const createProject = async (req,res) => {
-    try {
-        const newProject = new Project(req.body);
-        await newProject.save();
-        res.status(201).json(newProject);
-    } catch (error) {
-        res.status(500).json({ message: "Error creating project" });
     }
 }
 
@@ -55,3 +45,48 @@ export const deleteProject = async (req,res) => {
     }
 }  
 
+export const createProject = async (req, res) => {
+  try {
+    console.log("📩 Incoming form data:");
+    console.log("req.body:", req.body); // text inputs
+    console.log("req.files:", req.files);
+    const {
+      title,
+      description,
+      longDescription,
+      category,
+      status,
+      finishedAt,
+      demo,
+      github,
+    } = req.body;
+
+    let technologies = [];
+    if (req.body.technologies) {
+      technologies = Array.isArray(req.body.technologies)
+        ? req.body.technologies
+        : [req.body.technologies];
+    }
+
+    const project = new Project({
+      title,
+      description,
+      longDescription,
+      category,
+      status,
+      finishedAt: finishedAt ? new Date(finishedAt) : undefined,
+      links: { demo, github },
+      technologies,
+      image: req.files?.image ? req.files.image[0].path : "",
+      screenshots: req.files?.screenshots
+        ? req.files.screenshots.map((f) => f.path)
+        : [],
+    });
+
+    await project.save();
+    res.status(201).json(project);
+  } catch (err) {
+    console.error("Error creating project:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
