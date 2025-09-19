@@ -7,8 +7,10 @@ interface ProjectPlayerProps {
     title: string;
     description: string;
     status: string;
-    githubUrl?: string;
-    liveUrl?: string;
+    links: {
+      demo: string;
+      github: string;
+    };
   } | null;
 }
 
@@ -56,19 +58,19 @@ export function ProjectPlayer({ project }: ProjectPlayerProps) {
         </div>
 
         <div className="flex items-center space-x-2">
-          {project.githubUrl && (
+          {project.links.github && (
             <Button
               variant="ghost"
               size="sm"
               className="h-8 px-3 text-muted-foreground hover:text-foreground hover:bg-card-hover"
-              onClick={() => window.open(project.githubUrl, "_blank")}
+              onClick={() => window.open(project.links.github, "_blank")}
             >
               <Github className="h-4 w-4 mr-1" />
               Code
             </Button>
           )}
 
-          {project.liveUrl && (
+          {project.links.demo && (
             <Button
               variant="ghost"
               size="sm"
