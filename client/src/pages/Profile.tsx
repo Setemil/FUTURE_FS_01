@@ -56,34 +56,34 @@ export default function Profile() {
 
   console.log(experience);
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-4 sm:p-6 space-y-6 sm:space-y-8 max-w-7xl mx-auto">
       {/* Profile Header */}
-      <div className="flex items-start space-x-6">
-        <Avatar className="h-58 w-52 rounded-lg">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+        <Avatar className="h-32 w-32 sm:h-40 sm:w-40 md:h-48 md:w-48 lg:h-52 lg:w-52 rounded-lg flex-shrink-0">
           <AvatarImage
             src="/pic.png"
             alt="Setemi Loye"
             className="object-cover"
           />
-          <AvatarFallback className="bg-primary text-primary-foreground text-4xl font-bold">
+          <AvatarFallback className="bg-primary text-primary-foreground text-2xl sm:text-3xl md:text-4xl font-bold">
             SL
           </AvatarFallback>
         </Avatar>
 
-        <div className="flex-1 space-y-4">
+        <div className="flex-1 space-y-4 text-center sm:text-left w-full">
           <div>
-            <h1 className="text-4xl font-bold text-foreground">Setemi Loye</h1>
-            <p className="text-xl text-primary font-medium mt-1">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">Setemi Loye</h1>
+            <p className="text-lg sm:text-xl text-primary font-medium mt-1">
               Full-Stack Developer
             </p>
-            <p className="text-muted-foreground mt-2 max-w-2xl">
+            <p className="text-sm sm:text-base text-muted-foreground mt-2 max-w-2xl mx-auto sm:mx-0">
               Passionate full-stack developer with 5+ years of experience
               building scalable web applications. I love creating efficient,
               user-friendly solutions that solve real-world problems.
             </p>
           </div>
 
-          <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start space-y-2 sm:space-y-0 sm:space-x-6 text-sm text-muted-foreground">
             <div className="flex items-center space-x-1">
               <MapPin className="h-4 w-4" />
               <span>Lagos, NG</span>
@@ -94,20 +94,21 @@ export default function Profile() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4">
             <a
               href="/CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
               download="Setemi_Loye_Resume.pdf"
+              className="w-full sm:w-auto"
             >
-              <Button className="bg-primary hover:bg-primary-hover text-primary-foreground">
+              <Button className="bg-primary hover:bg-primary-hover text-primary-foreground w-full sm:w-auto">
                 <Download className="h-4 w-4 mr-2" />
                 Download Resume
               </Button>
             </a>
-            <Link to="/contact">
-              <Button variant="secondary" className="border-border">
+            <Link to="/contact" className="w-full sm:w-auto">
+              <Button variant="secondary" className="border-border w-full sm:w-auto">
                 <Mail className="h-4 w-4 mr-2" />
                 Contact Me
               </Button>
@@ -118,32 +119,32 @@ export default function Profile() {
 
       {/* Skills & Technologies */}
       <section className="space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground">
           Skills & Technologies
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           {Object.entries(groupedSkills).map(([category, skillList]) => (
             <Card key={category} className="bg-card border-border">
-              <CardHeader>
-                <CardTitle className="capitalize text-foreground">
+              <CardHeader className="pb-3 sm:pb-6">
+                <CardTitle className="capitalize text-foreground text-lg sm:text-xl">
                   {category}
                 </CardTitle>
-                <CardDescription className="text-muted-foreground">
+                <CardDescription className="text-muted-foreground text-sm">
                   {category == "tools"
                     ? `Tools I use for Development`
                     : `Technologies I work with in ${category.toLowerCase()} development`}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {skillList.map((skill) => (
                     <div key={skill.name} className="space-y-2">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-1 sm:space-y-0">
                         <span className="text-sm font-medium text-foreground flex items-center gap-2">
                           <img
                             src={skill.icon}
                             alt={skill.name}
-                            className="h-5 w-5"
+                            className="h-4 w-4 sm:h-5 sm:w-5"
                           />
                           {skill.name}
                         </span>
@@ -167,9 +168,9 @@ export default function Profile() {
 
       {/* Experience */}
       <section className="pb-20 space-y-6">
-        <h2 className="text-2xl font-bold text-foreground">Experience</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground">Experience</h2>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {[...experience]
             .sort(
               (a, b) =>
@@ -178,26 +179,26 @@ export default function Profile() {
             )
             .map((xp, index) => (
               <Card key={index} className="bg-card border-border">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
+                <CardHeader className="pb-3 sm:pb-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-2 sm:space-y-0">
                     <div>
-                      <CardTitle className="text-foreground">
+                      <CardTitle className="text-foreground text-lg sm:text-xl">
                         {xp.role}
                       </CardTitle>
-                      <CardDescription className="text-primary font-medium">
+                      <CardDescription className="text-primary font-medium text-sm sm:text-base">
                         {xp.location}
                       </CardDescription>
                     </div>
                     <Badge
                       variant="secondary"
-                      className="bg-secondary/50 text-secondary-foreground"
+                      className="bg-secondary/50 text-secondary-foreground text-xs sm:text-sm self-start"
                     >
                       {formatDatePeriod(xp.startDate, xp.endDate, xp.isCurrent)}
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{xp.workDescription}</p>
+                  <p className="text-muted-foreground text-sm sm:text-base">{xp.workDescription}</p>
                 </CardContent>
               </Card>
             ))}
