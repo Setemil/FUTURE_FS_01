@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const ProjectForm = ({ initialData, onSave, onClose }) => {
   const API = import.meta.env.VITE_API_URL;
 
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -93,34 +94,34 @@ const handleSubmit = (e) => {
 
   const formData = new FormData();
 
-  // 🔑 Always append required fields
+  // 🔑 Append text fields
   formData.append("title", form.title || "");
   formData.append("description", form.description || "");
   formData.append("longDescription", form.longDescription || "");
-
-  // other optional fields
   formData.append("category", form.category || "");
   formData.append("status", form.status || "");
   formData.append("finishedAt", form.finishedAt || "");
   formData.append("demo", form.links.demo || "");
   formData.append("github", form.links.github || "");
 
-  // append technologies (multiple values with same key)
+  // 🔑 Append technologies (multi-select)
   if (form.technologies?.length > 0) {
     form.technologies.forEach((techId) => {
       formData.append("technologies", techId);
     });
   }
 
-  // append image only if user selected a File
+  // 🔑 Append image (single file)
   if (form.image && form.image instanceof File) {
     formData.append("image", form.image);
   }
 
-  // append screenshots if they are File objects
+  // 🔑 Append screenshots (multiple files)
   if (form.screenshots?.length > 0) {
     form.screenshots.forEach((file) => {
-      if (file instanceof File) formData.append("screenshots", file);
+      if (file instanceof File) {
+        formData.append("screenshots", file);
+      }
     });
   }
 

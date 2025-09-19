@@ -6,12 +6,10 @@ import {
   updateProject,
   deleteProject,
 } from "../controllers/project.controller.js";
-import { requireAdmin } from '../middleware/auth.js'
+import { requireAdmin } from "../middleware/auth.js";
 import upload from "../config/multer.js";
 
-
 const router = express.Router();
-
 
 /**
  * @swagger
@@ -93,10 +91,22 @@ router
   .get(getProjects)
   .post(
     requireAdmin,
-    upload.fields([{ name: "image", maxCount: 1 }, { name: "screenshots", maxCount: 3 }]),
+    upload.fields([
+      { name: "image", maxCount: 1 },
+      { name: "screenshots", maxCount: 3 },
+    ]),
     createProject
-  );
-
+)
+  .post("/test-upload", async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/sample.jpg", {
+      folder: "portfolio_projects"
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 /**
  * @swagger
@@ -150,7 +160,5 @@ router
     updateProject
   )
   .delete(requireAdmin, deleteProject);
-
-
 
 export default router;
