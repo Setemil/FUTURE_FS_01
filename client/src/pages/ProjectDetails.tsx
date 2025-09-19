@@ -6,6 +6,7 @@ import { ExternalLink, Github, Loader2 } from "lucide-react";
 
 export default function ProjectDetails() {
   const API = import.meta.env.VITE_API_URL;
+  
 
   const { id } = useParams();
   const [project, setProject] = useState<any>(null);
@@ -46,6 +47,8 @@ export default function ProjectDetails() {
       </div>
     );
   }
+
+  
 
   return (
     <div className="min-h-screen bg-black pb-12">

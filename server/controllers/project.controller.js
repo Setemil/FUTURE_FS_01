@@ -16,7 +16,7 @@ export const getProjects = async (req, res) => {
 
 export const getProject = async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
+const project = await Project.findById(req.params.id).populate("technologies");
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
