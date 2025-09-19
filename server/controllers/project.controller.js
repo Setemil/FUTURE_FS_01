@@ -1,4 +1,9 @@
 import Project from '../model/project.model.js';
+import dotenv from 'dotenv';
+
+dotenv.config()
+
+const serverURL = process.env.SERVER_URL;
 
 export const getProjects = async (req, res) => {
     try {
@@ -47,9 +52,6 @@ export const deleteProject = async (req,res) => {
 
 export const createProject = async (req, res) => {
   try {
-    console.log("📩 Incoming form data:");
-    console.log("req.body:", req.body); // text inputs
-    console.log("req.files:", req.files);
     const {
       title,
       description,
@@ -77,9 +79,9 @@ export const createProject = async (req, res) => {
       finishedAt: finishedAt ? new Date(finishedAt) : undefined,
       links: { demo, github },
       technologies,
-      image: req.files?.image ? req.files.image[0].path : "",
+      image: req.files?.image ? `${serverURL}/uploads/${req.files.image[0].filename}` : "",
       screenshots: req.files?.screenshots
-        ? req.files.screenshots.map((f) => f.path)
+        ? req.files.screenshots.map((f) => `/uploads/${f.filename}`)
         : [],
     });
 

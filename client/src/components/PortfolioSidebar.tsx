@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Home,
   User,
@@ -7,7 +8,8 @@ import {
   ExternalLink,
   Github,
 } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import {useState, useEffect} from 'react'
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -20,56 +22,42 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-// Import project images
-import ecommerceProject from "@/assets/project-ecommerce.jpg";
-import fitnessProject from "@/assets/project-fitness.jpg";
-import aiChatProject from "@/assets/project-ai-chat.jpg";
-import taskflowProject from "@/assets/project-taskflow.jpg";
-
 const navigationItems = [
   { title: "Profile", url: "/", icon: User },
   { title: "Projects", url: "/projects", icon: FolderOpen },
   { title: "Contact", url: "/contact", icon: Mail },
 ];
 
-const featuredProjects = [
-  {
-    id: "1",
-    title: "E-Commerce Dashboard",
-    category: "Full-Stack",
-    image: ecommerceProject,
-    tech: ["React", "Node.js", "MongoDB"],
-  },
-  {
-    id: "2",
-    title: "FitTracker Mobile",
-    category: "Mobile App",
-    image: fitnessProject,
-    tech: ["React Native", "Firebase"],
-  },
-  {
-    id: "3",
-    title: "AI Chat Assistant",
-    category: "AI/ML",
-    image: aiChatProject,
-    tech: ["Python", "OpenAI", "Flask"],
-  },
-  {
-    id: "4",
-    title: "TaskFlow Pro",
-    category: "SaaS",
-    image: taskflowProject,
-    tech: ["Next.js", "Prisma", "PostgreSQL"],
-  },
-];
+interface ProjectsProps {
+  onProjectSelect: (project: any) => void;
+}
 
-export function PortfolioSidebar() {
+
+export function PortfolioSidebar({ onProjectSelect }: ProjectsProps) {
+  const [data, setData] = useState([]);
   const { state } = useSidebar();
   const location = useLocation();
-  const currentPath = location.pathname;
   const isCollapsed = state === "collapsed";
+  const navigate = useNavigate();
 
-  const isActive = (path: string) => currentPath === path;
+    const playButton = (project) => {
+      onProjectSelect(project);
+      navigate(`/projects/${project._id}`);
+    };
+
+  useEffect(() => {
+    async function getProjects() {
+      try {
+        const res = await fetch("http://localhost:3000/api/projects");
+        const projects = await res.json();
+        setData(projects);
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+      }
+    }
+    getProjects();
+  }, []);
+
   const getNavClasses = ({ isActive }: { isActive: boolean }) =>
     `${
       isActive
@@ -125,9 +113,9 @@ export function PortfolioSidebar() {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <div className="space-y-2 px-2">
-                {featuredProjects.map((project) => (
+                {data.map((project) => (
                   <div
-                    key={project.id}
+                    key={project._id}
                     className="group flex items-center space-x-3 p-2 rounded-lg hover:bg-card-hover cursor-pointer transition-smooth"
                   >
                     <div className="relative">
@@ -137,7 +125,9 @@ export function PortfolioSidebar() {
                         className="w-12 h-12 rounded-lg object-cover shadow-spotify"
                       />
                       <div className="absolute inset-0 bg-spotify-black/20 opacity-0 group-hover:opacity-100 transition-smooth rounded-lg flex items-center justify-center">
-                        <Play className="h-4 w-4 text-primary fill-primary" />
+                        <button onClick={() => playButton(project)}>
+                          <Play className="h-4 w-4 text-primary fill-primary" />
+                        </button>
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">

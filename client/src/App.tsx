@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 import RequestOTP from "./pages/RequestOTP";
 import VerifyOTP from "./pages/VerifyOTP";
 import Admin from "./pages/Admin";
+import Project from "./pages/ProjectDetails";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,7 @@ const App = () => {
           <BrowserRouter>
             <SidebarProvider>
               <div className="flex min-h-screen w-full bg-background">
-                <PortfolioSidebar />
+                <PortfolioSidebar onProjectSelect={setSelectedProject} />
 
                 <div className="flex-1 flex flex-col">
                   <TopNavigation />
@@ -50,6 +51,7 @@ const App = () => {
                         }
                       />
                       <Route path="/" element={<Profile />} />
+                      <Route path="/projects/:id" element={<Project />} />
                       <Route path="/contact" element={<Contact />} />
 
                       {/* Protected Admin Routes */}

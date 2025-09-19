@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Filter, Grid, List } from "lucide-react";
 
 const categories = ["All", "Frontend", "Backend", "Fullstack"];
-
 interface ProjectsProps {
   onProjectSelect: (project: any) => void;
 }
@@ -41,6 +40,7 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
           return categoryCapitalized === selectedCategory;
         });
 
+  
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -105,7 +105,7 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
       >
         {filteredProjects.map((project) => (
           <ProjectCard
-            key={project.id}
+            key={project._id}
             project={{
               ...project,
               category:

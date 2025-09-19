@@ -8,10 +8,22 @@ import {
 } from "../controllers/project.controller.js";
 import { requireAdmin } from '../middleware/auth.js'
 import multer from "multer";
+import path from "path";
 
 
 const router = express.Router();
-const upload = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname); // get original file extension
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext); // e.g., image-123456789.jpg
+  },
+});
+
+export const upload = multer({ storage });
 
 
 /**
