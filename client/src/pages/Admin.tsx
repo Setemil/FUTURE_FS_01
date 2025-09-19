@@ -32,6 +32,7 @@ import ExperienceForm from "@/components/ExperienceForm";
 import DeleteModal from "@/components/DeleteModal";
 
 const Admin = () => {
+  const API = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   // PROJECTS STATES
@@ -66,7 +67,7 @@ const Admin = () => {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const response = await fetch("http://localhost:3000/api/projects");
+        const response = await fetch(`${API}/api/projects`);
         if (!response.ok) {
           throw new Error("Failed to get projects");
         }
@@ -82,7 +83,7 @@ const Admin = () => {
   useEffect(() => {
     async function fetchSkills() {
       try {
-        const response = await fetch("http://localhost:3000/api/skills");
+        const response = await fetch(`${API}/api/skills`);
         if (!response.ok) {
           throw new Error("Failed to get skills");
         }
@@ -98,7 +99,7 @@ const Admin = () => {
   useEffect(() => {
     async function fetchExperience() {
       try {
-        const response = await fetch("http://localhost:3000/api/experience");
+        const response = await fetch(`${API}/api/experience`);
         if (!response.ok) {
           throw new Error("Failed to get experience");
         }
@@ -171,7 +172,7 @@ const Admin = () => {
     console.log(deletingItem.item);
     try {
       const res = await fetch(
-        `http://localhost:3000/api/${deletingItem.type}/${deletingItem.item._id}`,
+        `${API}/api/${deletingItem.type}/${deletingItem.item._id}`,
         {
           method: "DELETE",
           headers: {
@@ -577,7 +578,7 @@ const Admin = () => {
           onSave={(data) => {
             if (editingProject) {
               fetch(
-                `http://localhost:3000/api/projects/${editingProject._id}`,
+                `${API}/api/projects/${editingProject._id}`,
                 {
                   method: "PUT",
                   headers: {
@@ -603,7 +604,7 @@ const Admin = () => {
                 }
               });
             } else {
-              fetch("http://localhost:3000/api/projects", {
+              fetch(`${API}/api/projects`, {
                 method: "POST",
                 headers: {
                   Authorization: `Bearer ${token}`,
@@ -630,7 +631,7 @@ const Admin = () => {
           initialData={editingSkill}
           onSave={(data) => {
             if (editingSkill) {
-              fetch(`http://localhost:3000/api/skills/${editingSkill._id}`, {
+              fetch(`${API}/api/skills/${editingSkill._id}`, {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json",
@@ -653,7 +654,7 @@ const Admin = () => {
                 }
               });
             } else {
-              fetch("http://localhost:3000/api/skills", {
+              fetch(`${API}/api/skills`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -682,7 +683,7 @@ const Admin = () => {
           onSave={(data) => {
             if (editingExperience) {
               fetch(
-                `http://localhost:3000/api/experience/${editingExperience._id}`,
+                `${API}/api/experience/${editingExperience._id}`,
                 {
                   method: "PUT",
                   headers: {
@@ -709,7 +710,7 @@ const Admin = () => {
                 }
               });
             } else {
-              fetch("http://localhost:3000/api/experience", {
+              fetch(`${API}/api/experience`, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",

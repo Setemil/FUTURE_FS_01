@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 const ProjectForm = ({ initialData, onSave, onClose }) => {
+  const API = import.meta.env.VITE_API_URL;
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -23,7 +25,7 @@ const ProjectForm = ({ initialData, onSave, onClose }) => {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/skills");
+        const res = await fetch(`${API}/api/skills`);
         if (res.ok) {
           const data = await res.json();
           setAvailableSkills(data);

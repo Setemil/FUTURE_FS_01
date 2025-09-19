@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Home,
@@ -34,6 +35,8 @@ interface ProjectsProps {
 
 
 export function PortfolioSidebar({ onProjectSelect }: ProjectsProps) {
+  const API = import.meta.env.VITE_API_URL;
+
   const [data, setData] = useState([]);
   const { state } = useSidebar();
   const location = useLocation();
@@ -48,7 +51,7 @@ export function PortfolioSidebar({ onProjectSelect }: ProjectsProps) {
   useEffect(() => {
     async function getProjects() {
       try {
-        const res = await fetch("http://localhost:3000/api/projects");
+        const res = await fetch(`${API}/api/projects`);
         const projects = await res.json();
         setData(projects);
       } catch (error) {

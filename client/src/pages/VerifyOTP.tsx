@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const VerifyOTP = () => {
+  const API = import.meta.env.VITE_API_URL;
+
   const [otp, setValue] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -12,7 +14,7 @@ const VerifyOTP = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/admin/verify-otp", {
+      const res = await fetch(`${API}/api/admin/verify-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

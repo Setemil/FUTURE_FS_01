@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ExternalLink, Github, Loader2 } from "lucide-react";
 
 export default function ProjectDetails() {
+  const API = import.meta.env.VITE_API_URL;
+
   const { id } = useParams();
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +15,7 @@ export default function ProjectDetails() {
     async function fetchProject() {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:3000/api/projects/${id}`);
+        const res = await fetch(`${API}/api/projects/${id}`);
         if (!res.ok) throw new Error("Failed to fetch project");
         const data = await res.json();
         setProject(data);

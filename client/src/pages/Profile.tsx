@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
+  const API = import.meta.env.VITE_API_URL;
   const formatDatePeriod = (startDate, endDate, isCurrent) => {
     const formatDate = (date) => {
       return new Date(date).toLocaleDateString("en-US", {
@@ -31,14 +33,14 @@ export default function Profile() {
   const [experience, setExperience] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/skills")
+    fetch(`${API}/api/skills`)
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching skills:", error));
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/experience")
+    fetch(`${API}/api/experience`)
       .then((response) => response.json())
       .then((data) => setExperience(data))
       .catch((error) => console.error("Error fetching Experience: ", error));

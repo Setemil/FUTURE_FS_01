@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -10,6 +11,8 @@ interface ProjectsProps {
 }
 
 export default function Projects({ onProjectSelect }: ProjectsProps) {
+  const API = import.meta.env.VITE_API_URL;
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [projects, setProjects] = useState<any[]>([]);
@@ -17,7 +20,7 @@ export default function Projects({ onProjectSelect }: ProjectsProps) {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const response = await fetch("http://localhost:3000/api/projects");
+        const response = await fetch(`${API}/api/projects`);
         if (!response.ok) {
           throw new Error("Failed to fetch projects");
         }

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RequestOTP = () => {
+  const API = import.meta.env.VITE_API_URL;
+
   const [email, setEmail] = useState<string>("");
 
   const navigate = useNavigate();
@@ -9,7 +11,7 @@ const RequestOTP = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3000/api/admin/send-otp", {
+      const res = await fetch(`${API}/api/admin/send-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

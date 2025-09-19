@@ -24,6 +24,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
+  const API = import.meta.env.VITE_API_URL;
+
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -47,7 +49,7 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:3000/api/email", {
+      const res = await fetch(`${API}/api/email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
