@@ -79,9 +79,9 @@ export const createProject = async (req, res) => {
       finishedAt: finishedAt ? new Date(finishedAt) : undefined,
       links: { demo, github },
       technologies,
-      image: req.files?.image ? `${serverURL}/uploads/${req.files.image[0].filename}` : "",
+      image: req.files?.image ? req.files.image[0].path : "",
       screenshots: req.files?.screenshots
-        ? req.files.screenshots.map((f) => `/uploads/${f.filename}`)
+        ? req.files.screenshots.map((f) => f.path)
         : [],
     });
 
