@@ -151,15 +151,4 @@ router
   )
   .delete(requireAdmin, deleteProject);
 
-router.post("/test-upload", async (req, res) => {
-  try {
-    const result = await cloudinary.uploader.upload("https://res.cloudinary.com/demo/image/upload/sample.jpg", {
-      folder: "portfolio_projects"
-    });
-    res.json(result);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
 export default router;
