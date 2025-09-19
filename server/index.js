@@ -41,7 +41,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: "http://localhost:8080", // your frontend URL
+    origin: "https://portfolio-flame-eta-10.vercel.app", // your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
