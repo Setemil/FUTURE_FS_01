@@ -26,6 +26,9 @@ export function TopNavigation() {
   const location = useLocation();
   const navigate = useNavigate();
   const isProjectDetails = /^\/projects\/[^/]+$/.test(location.pathname);
+  const secretMovement = () => {
+    navigate("/admin")
+  }
 
   return (
     <header className="flex items-center justify-between h-16 px-4 bg-background border-b border-border">
@@ -80,6 +83,7 @@ export function TopNavigation() {
           variant="ghost"
           size="sm"
           className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-card-hover rounded-full"
+          onClick={secretMovement}
         >
           <Bell className="h-4 w-4" />
         </Button>
